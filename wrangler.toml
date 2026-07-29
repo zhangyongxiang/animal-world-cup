@@ -1,7 +1,7 @@
 
 ALLOWED_ORIGINS = ["https://zoo-cup.com"]
 
-name = "animal-cup"
+name = "animal-world-cup"
 main = ".open-next/worker.js"
 compatibility_date = "2025-04-01"
 compatibility_flags = ["nodejs_compat"]

@@ -12,9 +12,9 @@
     "test:online": "node script/verify-online-relay.mjs",
     "test:online:browser": "node script/verify-online-browser.mjs",
     "deploy:online": "wrangler deploy -c wrangler-online.toml",
-    "prebuild": "npx rimraf .next",
+    "prebuild": "rm -rf .next",
     "build": "node script/stamp-sw-version.mjs && node script/safe-build.mjs",
-    "build:worker": "npx rimraf .next .open-next && node script/stamp-sw-version.mjs && opennextjs-cloudflare build",
+    "build:worker": "rm -rf .next .open-next && node script/stamp-sw-version.mjs && opennextjs-cloudflare build",
     "start": "next start -p 13000"
   },
   "dependencies": {
