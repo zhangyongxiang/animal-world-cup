@@ -22,4 +22,4 @@ simple = { limit = 60, period = 60 }
 
 [vars]
 # Replace with the deployed web origin before production deployment.
-ALLOWED_ORIGINS = "http://localhost:13000,http://127.0.0.1:13000"
+ALLOWED_ORIGINS = "http://localhost:13000,http://127.0.0.1:13000,https://game.zoo-cup.com"
