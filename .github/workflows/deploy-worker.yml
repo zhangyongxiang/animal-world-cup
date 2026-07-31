@@ -1,6 +1,9 @@
 name: Build & Deploy Animal Cup Online
+# 任意分支推送都会触发
 on:
   push:
+    branches: ['*']
+  pull_request:
     branches: [ main ]
 
 jobs:
@@ -15,7 +18,6 @@ jobs:
         with:
           node-version: 22
 
-      # ✅官方推荐方式安装pnpm，自动配置PATH（解决找不到pnpm的核心方案）
       - name: Install pnpm
         uses: pnpm/action-setup@v4
         with:
