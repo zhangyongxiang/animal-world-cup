@@ -1,6 +1,6 @@
 name = "animal-cup-online"
-main = "cloudflare/online-worker.js"
-compatibility_date = "2026-04-07"
+main = ".open-next/worker.js"
+compatibility_date = "2026-07-07"
 
 [[durable_objects.bindings]]
 name = "ONLINE_ROOMS"
