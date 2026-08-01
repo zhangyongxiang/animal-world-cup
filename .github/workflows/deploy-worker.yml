@@ -2,32 +2,35 @@ name: Build & Deploy Game Frontend
 on:
   push:
     branches: ['*']
-    paths-ignore:
-      - cloudflare/**
-      - wrangler-online.toml
-
 jobs:
   deploy-front:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: node-version:22
-      - uses: pnpm/action-setup@v4
-        with: version: latest
-      - run: pnpm install
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: 打包Next游戏网页（注入公网房间地址）
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: latest
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build Next Worker
         env:
-          # 这里填你执行pnpm deploy:online部署后生成的worker地址
-          NEXT_PUBLIC_ONLINE_SERVICE_URL: "https://animal-cup-online.275969940.workers.dev"
-          ALLOWED_ORIGINS: "https://game.zoo-cup.com,https://animal-cup-online.275969940.workers.dev"
+          NEXT_PUBLIC_ONLINE_SERVICE_URL: https://animal-cup-online.275969940.workers.dev
+          ALLOWED_ORIGINS: https://game.zoo-cup.com,https://animal-cup-online.275969940.workers.dev
         run: pnpm build:worker
 
-      - name: 部署网页（使用wrangler.toml，不是online配置）
+      - name: Deploy Frontend Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          # 关键！去掉 -c wrangler-online.toml，默认读取wrangler.toml
           command: deploy
