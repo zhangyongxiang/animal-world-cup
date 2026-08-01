@@ -38,7 +38,7 @@ jobs:
         env:
           # deploy:online 部署后的域名，固定填你的worker地址
           NEXT_PUBLIC_ONLINE_SERVICE_URL: https://animal-cup-online.275969940.workers.dev
-          ALLOWED_ORIGINS: https://animal-cup.275969940.workers.dev,https://front.zoo-cup.com
+          ALLOWED_ORIGINS: https://animal-cup.275969940.workers.dev,https://front.zoo-cup.com,https://animal-cup-online.275969940.workers.dev
         run: pnpm build:worker
 
       # ========== 第三步：部署游戏页面 ==========
