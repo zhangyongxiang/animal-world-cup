@@ -1,15 +1,15 @@
 name = "animal-cup-online"
-main = ".open-next/worker.js"
+main = "cloudflare/online-worker.js"
 compatibility_date = "2026-07-01"
 compatibility_flags = ["nodejs_compat"]
 
 [[durable_objects.bindings]]
-name = "ONLINE_ROOM"
+name = "ONLINE_ROOMS"
 class_name = "OnlineRoom"
 
 [[migrations]]
 tag = "v1"
-new_classes = ["OnlineRoom"]
+new_sqlite_classes = ["OnlineRoom"]
 
 [[ratelimits]]
 name = "CREATE_RATE_LIMITER"
@@ -23,4 +23,3 @@ simple = { limit = 60, period = 60 }
 
 [vars]
 ALLOWED_ORIGINS = "https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com"
-NEXT_PUBLIC_ONLINE_SERVICE_URL = "https://game.zoo-cup.com"
