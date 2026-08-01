@@ -1,50 +1,33 @@
-name: Build & Deploy Animal Cup Online
+name: Build & Deploy Game Frontend
 on:
   push:
     branches: ['*']
-  pull_request:
-    branches: [ main ]
+    paths-ignore:
+      - cloudflare/**
+      - wrangler-online.toml
 
 jobs:
-  deploy:
+  deploy-front:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: node-version:22
+      - uses: pnpm/action-setup@v4
+        with: version: latest
+      - run: pnpm install
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: latest
-
-      - name: Install dependencies
-        run: pnpm install
-
-      # ========== 第一步：部署Durable Object联机房间（文档要求pnpm deploy:online）==========
-      - name: Deploy Online Room DO Worker
+      - name: 打包Next游戏网页（注入公网房间地址）
         env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          ALLOWED_ORIGINS: https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com
-        run: pnpm deploy:online
-
-      # ========== 第二步：打包游戏前端页面 ==========
-      - name: Build worker 注入联机后端地址
-        env:
-          # deploy:online 部署后的域名，固定填你的worker地址
-          NEXT_PUBLIC_ONLINE_SERVICE_URL: https://animal-cup-online.275969940.workers.dev
-          ALLOWED_ORIGINS: https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com
+          # 这里填你执行pnpm deploy:online部署后生成的worker地址
+          NEXT_PUBLIC_ONLINE_SERVICE_URL: "https://animal-cup-online.275969940.workers.dev"
+          ALLOWED_ORIGINS: "https://game.zoo-cup.com,https://animal-cup-online.275969940.workers.dev"
         run: pnpm build:worker
 
-      # ========== 第三步：部署游戏页面 ==========
-      - name: Deploy Game Frontend Worker
+      - name: 部署网页（使用wrangler.toml，不是online配置）
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -c wrangler-online.toml # 注意页面用wrangler.toml，不是wrangler-online.toml！
+          accountId: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          # 关键！去掉 -c wrangler-online.toml，默认读取wrangler.toml
+          command: deploy
