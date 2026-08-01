@@ -22,4 +22,4 @@ namespace_id = "1002"
 simple = { limit = 60, period = 60 }
 
 [vars]
-ALLOWED_ORIGINS = "https://animal-cup.275969940.workers.dev,https://game.zoo-cup.com"
+ALLOWED_ORIGINS = "https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com"
