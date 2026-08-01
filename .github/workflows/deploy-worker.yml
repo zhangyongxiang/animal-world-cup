@@ -26,7 +26,9 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build worker (opennext cloudflare)
+      - name: Build worker
+        env: 
+          ALLOWED_ORIGINS: https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com
         run: pnpm build:worker
 
       - name: Deploy to Cloudflare Workers
