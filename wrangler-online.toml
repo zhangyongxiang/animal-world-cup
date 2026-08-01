@@ -1,16 +1,17 @@
 name = "animal-cup-online"
 main = ".open-next/worker.js"
 compatibility_date = "2026-07-01"
-# 核心修复：开启nodejs兼容，解决node:xxx模块缺失警告
 compatibility_flags = ["nodejs_compat"]
 
+# 修正：name改为单数 ONLINE_ROOM，和源码匹配
 [[durable_objects.bindings]]
-name = "ONLINE_ROOMS"
+name = "ONLINE_ROOM"
 class_name = "OnlineRoom"
 
+# 修正关键字 new_classes，删除错误new_sqlite_classes
 [[migrations]]
 tag = "v1"
-new_sqlite_classes = ["OnlineRoom"]
+new_classes = ["OnlineRoom"]
 
 [[ratelimits]]
 name = "CREATE_RATE_LIMITER"
@@ -23,5 +24,5 @@ namespace_id = "1002"
 simple = { limit = 60, period = 60 }
 
 [vars]
-# Replace with the deployed web origin before production deployment.
-ALLOWED_ORIGINS = "https://game.zoo-cup.com"
+# 同时放行workers.dev和自定义域名，两边都能访问
+ALLOWED_ORIGINS = "https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com"
