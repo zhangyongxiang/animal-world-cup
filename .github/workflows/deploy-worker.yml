@@ -47,4 +47,4 @@ jobs:
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -c wrangler.toml # 注意页面用wrangler.toml，不是wrangler-online.toml！
+          command: deploy -c wrangler-online.toml # 注意页面用wrangler.toml，不是wrangler-online.toml！
