@@ -16,7 +16,7 @@
     "deploy:online": "wrangler deploy -c wrangler-online.toml",
     "prebuild": "rm -rf .next",
     "build": "node script/stamp-sw-version.mjs && node script/safe-build.mjs",
-    "build:worker": "rm -rf .next .open-next && node script/stamp-sw-version.mjs && opennextjs-cloudflare build",
+    "build:worker": "rm -rf .next .open-next && node script/stamp-sw-version.mjs && opennextjs-cloudflare build --durable-object ./cloudflare/OnlineRoom.js",
     "start": "next start -p 13000"
   },
   "dependencies": {
