@@ -3,12 +3,10 @@ main = ".open-next/worker.js"
 compatibility_date = "2026-07-01"
 compatibility_flags = ["nodejs_compat"]
 
-# 修正：绑定名 ONLINE_ROOM 单数
 [[durable_objects.bindings]]
 name = "ONLINE_ROOM"
 class_name = "OnlineRoom"
 
-# 修正关键字 new_classes
 [[migrations]]
 tag = "v1"
 new_classes = ["OnlineRoom"]
@@ -25,5 +23,4 @@ simple = { limit = 60, period = 60 }
 
 [vars]
 ALLOWED_ORIGINS = "https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com"
-# 关键：打包时读取线上Worker地址
 NEXT_PUBLIC_ONLINE_SERVICE_URL = "https://game.zoo-cup.com"
