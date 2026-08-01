@@ -1,5 +1,4 @@
 name: Build & Deploy Animal Cup Online
-# 任意分支推送都会触发
 on:
   push:
     branches: ['*']
@@ -26,15 +25,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install
 
-      - name: Build worker（带DO注入参数）
+      # ========== 第一步：部署Durable Object联机房间（文档要求pnpm deploy:online）==========
+      - name: Deploy Online Room DO Worker
         env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           ALLOWED_ORIGINS: https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com
-          NEXT_PUBLIC_ONLINE_SERVICE_URL: https://game.zoo-cup.com
         run: pnpm deploy:online
 
-      - name: Deploy to Cloudflare Workers
+      # ========== 第二步：打包游戏前端页面 ==========
+      - name: Build worker 注入联机后端地址
+        env:
+          # deploy:online 部署后的域名，固定填你的worker地址
+          NEXT_PUBLIC_ONLINE_SERVICE_URL: https://animal-cup-online.275969940.workers.dev
+          ALLOWED_ORIGINS: https://animal-cup-online.275969940.workers.dev,https://game.zoo-cup.com
+        run: pnpm build:worker
+
+      # ========== 第三步：部署游戏页面 ==========
+      - name: Deploy Game Frontend Worker
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          command: deploy -c wrangler-online.toml
+          command: deploy -c wrangler.toml # 注意页面用wrangler.toml，不是wrangler-online.toml！
