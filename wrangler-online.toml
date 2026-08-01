@@ -1,6 +1,8 @@
 name = "animal-cup-online"
 main = ".open-next/worker.js"
-compatibility_date = "2026-07-07"
+compatibility_date = "2026-07-01"
+# 核心修复：开启nodejs兼容，解决node:xxx模块缺失警告
+compatibility_flags = ["nodejs_compat"]
 
 [[durable_objects.bindings]]
 name = "ONLINE_ROOMS"
